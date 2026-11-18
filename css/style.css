@@ -1,0 +1,315 @@
+/* ==========================================================================
+   Sorting Visualizer - Main Stylesheet
+   Design: Modern Dark Glassmorphism with Dynamic Neon Accents
+   ========================================================================== */
+
+:root {
+  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+
+  /* Theme Palette */
+  --bg-body: #090d16;
+  --bg-card: rgba(17, 24, 39, 0.75);
+  --bg-card-hover: rgba(24, 33, 53, 0.85);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(56, 189, 248, 0.3);
+
+  /* Bar Visual Colors */
+  --bar-default: #38bdf8;
+  --bar-default-gradient: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+  
+  --bar-compare: #fbbf24;
+  --bar-compare-gradient: linear-gradient(180deg, #fde047 0%, #d97706 100%);
+  --bar-compare-glow: 0 0 14px rgba(251, 191, 36, 0.6);
+
+  --bar-swap: #f43f5e;
+  --bar-swap-gradient: linear-gradient(180deg, #fb7185 0%, #e11d48 100%);
+  --bar-swap-glow: 0 0 16px rgba(244, 63, 94, 0.7);
+
+  --bar-pivot: #c084fc;
+  --bar-pivot-gradient: linear-gradient(180deg, #d8b4fe 0%, #9333ea 100%);
+  --bar-pivot-glow: 0 0 14px rgba(192, 132, 252, 0.6);
+
+  --bar-sorted: #10b981;
+  --bar-sorted-gradient: linear-gradient(180deg, #34d399 0%, #059669 100%);
+  --bar-sorted-glow: 0 0 12px rgba(16, 185, 129, 0.5);
+
+  --stage-bg: radial-gradient(circle at 50% 100%, #111827 0%, #090d16 100%);
+}
+
+/* Base resets & typography */
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-body);
+  color: #f1f5f9;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-monospace {
+  font-family: var(--font-mono) !important;
+}
+
+/* Glassmorphism Styles */
+.glass-navbar {
+  background: rgba(9, 13, 22, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-color: var(--border-color) !important;
+}
+
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* Brand Styling */
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.brand-subtitle {
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+}
+
+/* Form Controls */
+.select-custom {
+  background-color: rgba(15, 23, 42, 0.8);
+  border-color: var(--border-color);
+  color: #f1f5f9;
+  border-radius: 8px;
+}
+
+.select-custom:focus {
+  background-color: rgba(15, 23, 42, 0.95);
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 0.2rem rgba(56, 189, 248, 0.2);
+  color: #fff;
+}
+
+/* Custom Range Sliders */
+.custom-slider {
+  cursor: pointer;
+}
+
+.custom-slider::-webkit-slider-runnable-track {
+  background: rgba(255, 255, 255, 0.1);
+  height: 6px;
+  border-radius: 3px;
+}
+
+.custom-slider::-webkit-slider-thumb {
+  margin-top: -5px;
+  background: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+  border: 2px solid #090d16;
+  transition: transform 0.1s ease;
+}
+
+.custom-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Live Stats Pills */
+.stat-pill {
+  min-height: 48px;
+  border-radius: 10px;
+}
+
+.stat-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+}
+
+.stat-value {
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+
+/* Status Indicator Dot */
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #94a3b8;
+  display: inline-block;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.status-indicator.active {
+  background-color: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8;
+  animation: pulse-dot 1.5s infinite;
+}
+
+.status-indicator.paused {
+  background-color: #fbbf24;
+  box-shadow: 0 0 10px #fbbf24;
+}
+
+.status-indicator.completed {
+  background-color: #10b981;
+  box-shadow: 0 0 12px #10b981;
+}
+
+@keyframes pulse-dot {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.25); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+/* Legend Box Colors */
+.legend-bar {
+  background: rgba(10, 15, 26, 0.6);
+  font-size: 0.75rem;
+}
+
+.legend-color-box {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.bg-default { background: var(--bar-default); }
+.bg-compare { background: var(--bar-compare); }
+.bg-swap { background: var(--bar-swap); }
+.bg-pivot { background: var(--bar-pivot); }
+.bg-sorted { background: var(--bar-sorted); }
+
+/* ==========================================================================
+   Visualizer Canvas & Dynamic Bars
+   ========================================================================== */
+.visualizer-card {
+  min-height: 420px;
+  background: var(--stage-bg);
+}
+
+.visualizer-container {
+  width: 100%;
+  height: 100%;
+  gap: 3px;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Individual Bar Styling */
+.array-bar {
+  flex: 1 1 0;
+  background: var(--bar-default-gradient);
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 4px;
+  min-width: 2px;
+  transition: height 0.15s ease-out, background-color 0.15s ease;
+}
+
+/* Fast mode disables transitions for instantaneous 60fps frame rate */
+.visualizer-container.fast-mode .array-bar {
+  transition: none !important;
+}
+
+/* Bar States */
+.array-bar.compare {
+  background: var(--bar-compare-gradient) !important;
+  box-shadow: var(--bar-compare-glow);
+  z-index: 2;
+}
+
+.array-bar.swap {
+  background: var(--bar-swap-gradient) !important;
+  box-shadow: var(--bar-swap-glow);
+  z-index: 3;
+}
+
+.array-bar.pivot {
+  background: var(--bar-pivot-gradient) !important;
+  box-shadow: var(--bar-pivot-glow);
+  z-index: 2;
+}
+
+.array-bar.sorted {
+  background: var(--bar-sorted-gradient) !important;
+  box-shadow: var(--bar-sorted-glow);
+}
+
+/* Number Label inside / on top of bar */
+.bar-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   Algorithm Information Card
+   ========================================================================== */
+.metric-box {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-color);
+}
+
+.metric-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.complexity-table-wrapper {
+  background: rgba(15, 23, 42, 0.4);
+}
+
+/* Modal and Tooltips */
+.modal-content {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(16px);
+}
+
+kbd {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+@media (max-width: 768px) {
+  .visualizer-card {
+    min-height: 320px;
+  }
+
+  .visualizer-container {
+    gap: 1.5px;
+    padding: 8px !important;
+  }
+
+  .bar-label {
+    display: none !important;
+  }
+
+  .stat-value {
+    font-size: 0.95rem;
+  }
+}

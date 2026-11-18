@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorting Visualizer - Interactive Algorithm Exploration</title>
+  <meta name="description" content="A modern, web-based Sorting Algorithm Visualizer built with HTML5, CSS3, Bootstrap 5, and JavaScript.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+  <!-- Navigation Bar -->
+  <header class="navbar navbar-expand-lg border-bottom sticky-top glass-navbar py-2">
+    <div class="container-fluid px-lg-4">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+        <span class="brand-icon d-flex align-items-center justify-content-center text-primary">
+          <i class="bi bi-bar-chart-steps fs-4"></i>
+        </span>
+        <div class="d-flex flex-column">
+          <span class="fw-bold tracking-tight text-light">Sorting<span class="text-primary">Visualizer</span></span>
+          <small class="text-secondary font-monospace brand-subtitle">DSA Algorithms in Motion</small>
+        </div>
+      </a>
+
+      <!-- Quick Actions -->
+      <div class="d-flex align-items-center gap-2 ms-auto">
+        <button id="soundToggleBtn" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2" title="Toggle audio feedback">
+          <i class="bi bi-volume-up-fill" id="soundIcon"></i>
+          <span class="d-none d-sm-inline" id="soundStatusText">Sound On</span>
+        </button>
+        <button id="helpBtn" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#helpModal" title="Keyboard Shortcuts & Guide">
+          <i class="bi bi-question-circle"></i>
+        </button>
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1" title="View Source on GitHub">
+          <i class="bi bi-github"></i>
+          <span class="d-none d-md-inline">GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container-fluid px-lg-4 py-3 flex-grow-1 d-flex flex-column gap-3">
+
+    <!-- Controls Toolbar Panel -->
+    <section class="card glass-card shadow-sm border-secondary-subtle">
+      <div class="card-body p-3">
+        <div class="row g-3 align-items-center">
+
+          <!-- Algorithm Selection -->
+          <div class="col-12 col-md-6 col-xl-3">
+            <label for="algorithmSelect" class="form-label text-secondary small fw-semibold mb-1 d-flex justify-content-between">
+              <span><i class="bi bi-cpu me-1 text-primary"></i> Algorithm</span>
+              <span id="algoCategoryBadge" class="badge bg-secondary-subtle text-secondary font-monospace">Comparison</span>
+            </label>
+            <select id="algorithmSelect" class="form-select form-select-sm select-custom fw-semibold">
+              <optgroup label="Elementary Sorts">
+                <option value="bubble" selected>Bubble Sort</option>
+                <option value="selection">Selection Sort</option>
+                <option value="insertion">Insertion Sort</option>
+              </optgroup>
+              <optgroup label="Divide & Conquer / Advanced">
+                <option value="merge">Merge Sort</option>
+                <option value="quick">Quick Sort</option>
+                <option value="heap">Heap Sort</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <!-- Array Pattern Preset -->
+          <div class="col-6 col-md-3 col-xl-2">
+            <label for="arrayTypeSelect" class="form-label text-secondary small fw-semibold mb-1">
+              <i class="bi bi-shuffle me-1 text-info"></i> Array Pattern
+            </label>
+            <select id="arrayTypeSelect" class="form-select form-select-sm select-custom">
+              <option value="random" selected>Random</option>
+              <option value="nearlySorted">Nearly Sorted</option>
+              <option value="reversed">Reversed</option>
+              <option value="fewUnique">Few Unique</option>
+            </select>
+          </div>
+
+          <!-- Array Size Slider -->
+          <div class="col-6 col-md-3 col-xl-2">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label for="sizeSlider" class="form-label text-secondary small fw-semibold mb-0">
+                <i class="bi bi-arrows-expand me-1 text-warning"></i> Size
+              </label>
+              <span id="sizeValue" class="badge bg-dark-subtle border border-secondary-subtle font-monospace text-light">40</span>
+            </div>
+            <input type="range" class="form-range custom-slider" id="sizeSlider" min="10" max="100" value="40" step="2">
+          </div>
+
+          <!-- Animation Speed Slider -->
+          <div class="col-12 col-md-6 col-xl-2">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label for="speedSlider" class="form-label text-secondary small fw-semibold mb-0">
+                <i class="bi bi-speedometer2 me-1 text-success"></i> Speed
+              </label>
+              <span id="speedValue" class="badge bg-dark-subtle border border-secondary-subtle font-monospace text-light">Normal</span>
+            </div>
+            <input type="range" class="form-range custom-slider" id="speedSlider" min="1" max="100" value="65">
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="col-12 col-md-6 col-xl-3 d-flex gap-2 justify-content-xl-end flex-wrap">
+            <button id="generateBtn" class="btn btn-outline-info btn-sm flex-grow-1 flex-xl-grow-0 d-flex align-items-center justify-content-center gap-1" title="Generate New Array (Shortcut: R)">
+              <i class="bi bi-arrow-repeat"></i>
+              <span>New Array</span>
+            </button>
+            <button id="startBtn" class="btn btn-primary btn-sm flex-grow-1 flex-xl-grow-0 d-flex align-items-center justify-content-center gap-1 px-3 fw-bold" title="Start Sorting (Shortcut: Space)">
+              <i class="bi bi-play-fill fs-6"></i>
+              <span id="startBtnText">Sort</span>
+            </button>
+            <button id="pauseBtn" class="btn btn-outline-warning btn-sm d-flex align-items-center justify-content-center gap-1" disabled title="Pause / Resume Execution">
+              <i class="bi bi-pause-fill" id="pauseBtnIcon"></i>
+              <span id="pauseBtnText">Pause</span>
+            </button>
+            <button id="resetBtn" class="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center" disabled title="Cancel / Reset">
+              <i class="bi bi-arrow-counterclockwise"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats & Live Status Bar -->
+    <section class="row g-2">
+      <!-- Status Badge -->
+      <div class="col-12 col-md-5">
+        <div class="stat-pill glass-card d-flex align-items-center px-3 py-2 border-secondary-subtle">
+          <span class="status-indicator me-2" id="statusPulse"></span>
+          <span class="text-secondary small me-2 font-monospace">STATUS:</span>
+          <span class="text-light small fw-medium text-truncate" id="statusMessage">Ready to sort. Pick an algorithm and click Sort!</span>
+        </div>
+      </div>
+
+      <!-- Real-time Counters -->
+      <div class="col-4 col-md-2">
+        <div class="stat-pill glass-card d-flex flex-column px-3 py-2 border-secondary-subtle">
+          <span class="text-secondary text-uppercase fw-semibold stat-label">Comparisons</span>
+          <span class="stat-value text-warning font-monospace fw-bold" id="comparisonCount">0</span>
+        </div>
+      </div>
+
+      <div class="col-4 col-md-2">
+        <div class="stat-pill glass-card d-flex flex-column px-3 py-2 border-secondary-subtle">
+          <span class="text-secondary text-uppercase fw-semibold stat-label">Array Access / Swaps</span>
+          <span class="stat-value text-danger font-monospace fw-bold" id="swapCount">0</span>
+        </div>
+      </div>
+
+      <div class="col-4 col-md-3">
+        <div class="stat-pill glass-card d-flex flex-column px-3 py-2 border-secondary-subtle">
+          <span class="text-secondary text-uppercase fw-semibold stat-label">Elapsed Time</span>
+          <span class="stat-value text-info font-monospace fw-bold" id="timeElapsed">0.00 s</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Visualizer Canvas & Stage -->
+    <section class="card glass-card border-secondary-subtle visualizer-card flex-grow-1 d-flex flex-column position-relative overflow-hidden">
+      <!-- Color Legend Overlay -->
+      <div class="legend-bar d-flex flex-wrap gap-2 gap-md-3 px-3 py-2 border-bottom border-secondary-subtle small font-monospace">
+        <div class="d-flex align-items-center gap-1">
+          <span class="legend-color-box bg-default"></span>
+          <span class="text-secondary">Default</span>
+        </div>
+        <div class="d-flex align-items-center gap-1">
+          <span class="legend-color-box bg-compare"></span>
+          <span class="text-secondary">Comparing</span>
+        </div>
+        <div class="d-flex align-items-center gap-1">
+          <span class="legend-color-box bg-swap"></span>
+          <span class="text-secondary">Swapping / Overwrite</span>
+        </div>
+        <div class="d-flex align-items-center gap-1">
+          <span class="legend-color-box bg-pivot"></span>
+          <span class="text-secondary">Pivot / Boundary</span>
+        </div>
+        <div class="d-flex align-items-center gap-1">
+          <span class="legend-color-box bg-sorted"></span>
+          <span class="text-secondary">Sorted</span>
+        </div>
+      </div>
+
+      <!-- Bars Container -->
+      <div id="visualizerContainer" class="visualizer-container flex-grow-1 p-3 d-flex align-items-end justify-content-center">
+        <!-- Bars are dynamically injected here via JavaScript -->
+      </div>
+    </section>
+
+    <!-- Algorithm Information & Complexity Details Card -->
+    <section class="card glass-card border-secondary-subtle shadow-sm" id="algoInfoSection">
+      <div class="card-body p-3 p-lg-4">
+        <div class="row g-4 align-items-start">
+
+          <!-- Left Info: Description & Highlights -->
+          <div class="col-12 col-lg-7">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <h5 class="fw-bold text-light mb-0" id="algoTitle">Bubble Sort</h5>
+              <span id="algoPillBadge" class="badge bg-primary-subtle text-primary border border-primary-subtle">Stable</span>
+              <span id="algoInPlaceBadge" class="badge bg-success-subtle text-success border border-success-subtle">In-Place</span>
+            </div>
+            <p class="text-secondary mb-3 small" id="algoDescription">
+              Bubble Sort is a simple comparison-based sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. The pass through the list is repeated until the list is sorted.
+            </p>
+
+            <div class="row g-2 text-center text-sm-start">
+              <div class="col-6 col-sm-3">
+                <div class="metric-box p-2 rounded">
+                  <span class="text-secondary d-block font-monospace metric-label">STABILITY</span>
+                  <span class="fw-semibold text-light font-monospace" id="algoStableText">Yes</span>
+                </div>
+              </div>
+              <div class="col-6 col-sm-3">
+                <div class="metric-box p-2 rounded">
+                  <span class="text-secondary d-block font-monospace metric-label">IN-PLACE</span>
+                  <span class="fw-semibold text-light font-monospace" id="algoInPlaceText">Yes</span>
+                </div>
+              </div>
+              <div class="col-6 col-sm-3">
+                <div class="metric-box p-2 rounded">
+                  <span class="text-secondary d-block font-monospace metric-label">METHOD</span>
+                  <span class="fw-semibold text-light font-monospace" id="algoMethodText">Exchanging</span>
+                </div>
+              </div>
+              <div class="col-6 col-sm-3">
+                <div class="metric-box p-2 rounded">
+                  <span class="text-secondary d-block font-monospace metric-label">BEST FOR</span>
+                  <span class="fw-semibold text-light font-monospace" id="algoBestForText">Small arrays</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Info: Complexity Matrix -->
+          <div class="col-12 col-lg-5">
+            <div class="complexity-table-wrapper rounded border border-secondary-subtle p-3">
+              <h6 class="text-secondary text-uppercase fw-semibold font-monospace small mb-3">
+                <i class="bi bi-clock-history me-1 text-primary"></i> Asymptotic Complexity
+              </h6>
+              <div class="d-flex justify-content-between align-items-center py-1 border-bottom border-secondary-subtle">
+                <span class="small text-secondary">Best-case Time</span>
+                <span class="font-monospace fw-bold text-success" id="algoBestTime">Ω(N)</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center py-1 border-bottom border-secondary-subtle">
+                <span class="small text-secondary">Average-case Time</span>
+                <span class="font-monospace fw-bold text-warning" id="algoAvgTime">Θ(N²)</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center py-1 border-bottom border-secondary-subtle">
+                <span class="small text-secondary">Worst-case Time</span>
+                <span class="font-monospace fw-bold text-danger" id="algoWorstTime">O(N²)</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center py-1">
+                <span class="small text-secondary">Worst-case Space</span>
+                <span class="font-monospace fw-bold text-info" id="algoSpace">O(1)</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer py-3 border-top border-secondary-subtle text-center text-secondary small font-monospace">
+    <div class="container-fluid px-lg-4 d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+      <span>Built with <i class="bi bi-heart-fill text-danger"></i> using HTML5, CSS3, Bootstrap 5, & Vanilla JavaScript</span>
+      <span>Press <kbd class="bg-dark border border-secondary-subtle text-light">Space</kbd> to Start/Pause &bull; <kbd class="bg-dark border border-secondary-subtle text-light">R</kbd> to Shuffle</span>
+    </div>
+  </footer>
+
+  <!-- Help / Keyboard Shortcuts Modal -->
+  <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content glass-card border border-secondary-subtle">
+        <div class="modal-header border-bottom border-secondary-subtle">
+          <h5 class="modal-title fw-bold" id="helpModalLabel">
+            <i class="bi bi-keyboard me-2 text-primary"></i> Keyboard Shortcuts & Guide
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6 class="text-secondary text-uppercase font-monospace small mb-3">Hotkeys</h6>
+          <ul class="list-unstyled mb-4">
+            <li class="d-flex justify-content-between align-items-center py-2 border-bottom border-secondary-subtle">
+              <span class="small">Start / Pause Sorting</span>
+              <kbd class="bg-dark border border-secondary-subtle text-light">Space</kbd>
+            </li>
+            <li class="d-flex justify-content-between align-items-center py-2 border-bottom border-secondary-subtle">
+              <span class="small">Generate New Array</span>
+              <kbd class="bg-dark border border-secondary-subtle text-light">R</kbd>
+            </li>
+            <li class="d-flex justify-content-between align-items-center py-2 border-bottom border-secondary-subtle">
+              <span class="small">Toggle Audio Feedback</span>
+              <kbd class="bg-dark border border-secondary-subtle text-light">M</kbd>
+            </li>
+            <li class="d-flex justify-content-between align-items-center py-2">
+              <span class="small">Cancel & Reset Visualizer</span>
+              <kbd class="bg-dark border border-secondary-subtle text-light">Esc</kbd>
+            </li>
+          </ul>
+
+          <h6 class="text-secondary text-uppercase font-monospace small mb-2">Tips</h6>
+          <p class="small text-secondary mb-1">
+            &bull; Adjust the <strong>Size</strong> slider while visualizer is idle to test scaling behavior.
+          </p>
+          <p class="small text-secondary mb-1">
+            &bull; Test <strong>Reversed</strong> or <strong>Nearly Sorted</strong> arrays to observe how algorithms adapt to worst-case or best-case scenarios!
+          </p>
+          <p class="small text-secondary mb-0">
+            &bull; Web Audio plays synthetic pitches mapped directly to bar height for harmonic auditory feedback.
+          </p>
+        </div>
+        <div class="modal-footer border-top border-secondary-subtle">
+          <button type="button" class="btn btn-primary btn-sm px-3" data-bs-dismiss="modal">Got it!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <!-- Application Modules -->
+  <script src="js/audio.js"></script>
+  <script src="js/visualizer.js"></script>
+  <script src="js/algorithms.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

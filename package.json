@@ -1,0 +1,15 @@
+{
+  "name": "sorting-algorithm-visualizer",
+  "version": "1.0.0",
+  "description": "Interactive 60fps sorting algorithm visualizer with harmonic Web Audio API feedback",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["sorting", "algorithms", "visualizer", "audio-api", "javascript", "nodejs"],
+  "author": "Shreyas Shetty <jshreyasshetty@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
